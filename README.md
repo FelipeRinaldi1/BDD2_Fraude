@@ -7,10 +7,8 @@ Siga a ordem exata dos comandos abaixo no terminal da sua VM.
 # Sobe os containers e recria se necessário
 sudo docker-compose up -d --build
 
-
 # 2
 sudo docker-compose exec app pip install "pandas<2.0" "sqlalchemy<2.0" "numpy<2.0" pymysql cryptography pymongo apache-airflow scikit-learn matplotlib seaborn 
-
 
 # 3
 sudo docker-compose exec app python 1_setup_split.py
