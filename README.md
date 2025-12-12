@@ -2,6 +2,8 @@
 
 Siga a ordem exata dos comandos abaixo no terminal da sua VM.
 ```bash
+
+#1
 # Sobe os containers e recria se necessário
 sudo docker-compose up -d --build
 
