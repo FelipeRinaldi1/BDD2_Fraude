@@ -7,21 +7,18 @@ import os
 
 # --- Configurações ---
 BASE_PATH = '/app'
-# CORREÇÃO 1: Caminho apontando para a pasta 'gold' e sem o prefixo 'sqlite:///'
 GOLD_DB_PATH = '/app/data/gold/fraude_gold.db'
 
 def run_ml_model():
     print("--- Iniciando Consumo de Dados (ML) ---")
     
     # 1. Conectar na camada GOLD (SQLite)
-    # O prefixo é adicionado aqui corretamente
     db_path = f'sqlite:///{GOLD_DB_PATH}'
     print(f"Conectando ao SQLite Gold: {db_path}")
     
     try:
         engine = create_engine(db_path)
         
-        # CORREÇÃO 2: Usar raw_connection() para evitar erro do Pandas vs SQLAlchemy
         conn = engine.raw_connection()
         df = pd.read_sql("SELECT * FROM tb_transacoes_completa", conn)
         conn.close()
