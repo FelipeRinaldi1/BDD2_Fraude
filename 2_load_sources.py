@@ -6,13 +6,12 @@ import sys
 
 # --- Configurações MySQL (Docker) ---
 MYSQL_USER = 'root'
-MYSQL_PASS = 'root' # A senha que você definiu ao subir o Docker
+MYSQL_PASS = 'root' 
 MYSQL_HOST = 'db'
 MYSQL_PORT = '3306'
 MYSQL_DB_NAME = 'projeto_bd2'
 
 # --- Configurações MongoDB (Atlas Cloud) ---
-# SUBSTITUA ABAIXO PELA SUA STRING DO ATLAS
 MONGO_URI = "mongodb+srv://aluno:aluno123@cluster0.e1klxkq.mongodb.net/?appName=Cluster0"
 MONGO_DB_NAME = "db_fraude_origem"
 MONGO_COLL_NAME = "transacoes_parte2"
@@ -76,6 +75,5 @@ def load_mongo():
         sys.exit(1)
 
 if __name__ == "__main__":
-    # Garanta que seu container MySQL Docker esteja rodando antes disso!
     load_mysql()
     load_mongo()
