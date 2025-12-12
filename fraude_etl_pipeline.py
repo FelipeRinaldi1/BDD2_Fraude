@@ -1,5 +1,3 @@
-# Nome do arquivo (salvar na pasta de DAGs do Airflow): fraude_etl_pipeline.py
-
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
@@ -16,9 +14,9 @@ BRONZE_PATH = os.path.join(BASE_PATH, "data/bronze")
 SILVER_PATH = os.path.join(BASE_PATH, "data/silver")
 GOLD_DB_PATH = os.path.join(BASE_PATH, "data/fraude_gold.db")
 
-# Configurações das Fontes (Sources)
+# Configurações das Fontes 
 MYSQL_STR = 'mysql+pymysql://root:root@db/projeto_bd2'
-# SUBSTITUA PELA SUA STRING REAL DO ATLAS
+
 MONGO_URI = "mongodb+srv://aluno:aluno123@cluster0.e1klxkq.mongodb.net/?appName=Cluster0"
 MONGO_DB = "db_fraude_origem"
 MONGO_COLL = "transacoes_parte2"
@@ -34,7 +32,7 @@ def etl_extract_mysql_to_bronze():
     """Lê do MySQL e salva como TXT (string CSV) na Bronze"""
     print("Iniciando extração MySQL...")
     engine = create_engine(MYSQL_STR)
-    conn = engine.raw_connection() # <--- A correção mágica
+    conn = engine.raw_connection()
     df = pd.read_sql("SELECT * FROM transacoes_parte1", conn)
     conn.close()
     
@@ -51,11 +49,11 @@ def etl_extract_mongo_to_bronze():
     db = client[MONGO_DB]
     coll = db[MONGO_COLL]
     
-    # Busca tudo e remove o '_id' padrão do Mongo que atrapalha depois
+    # Busca tudo e remove o '_id' padrão do Mongo
     cursor = coll.find({}, {'_id': 0})
     list_docs = list(cursor)
     
-    # Simula salvamento raw (bruto) em TXT formatado como JSON string
+    # Simula salvamento raw em TXT formatado como JSON string
     json_content = json.dumps(list_docs)
     with open(BRONZE_MONGO_FILE, "w") as f:
         f.write(json_content)
@@ -65,10 +63,10 @@ def etl_transform_to_silver():
     """Lê os TXTs da Bronze, unifica, limpa e salva como Dataframe (pickle) na Silver"""
     print("Iniciando transformação Silver...")
     
-    # Ler Bronze MySQL (formato CSV string)
+    # Ler Bronze MySQL
     df_mysql = pd.read_csv(BRONZE_MYSQL_FILE)
     
-    # Ler Bronze Mongo (formato JSON string)
+    # Ler Bronze Mongo
     with open(BRONZE_MONGO_FILE, 'r') as f:
         mongo_data = json.load(f)
     df_mongo = pd.DataFrame(mongo_data)
@@ -78,15 +76,15 @@ def etl_transform_to_silver():
     # Unificar
     df_final = pd.concat([df_mysql, df_mongo], ignore_index=True)
     
-    # --- Transformações básicas (Exemplos) ---
+    # --- Transformações básicas ---
     # Garantir que 'Class' seja inteiro
     df_final['Class'] = df_final['Class'].astype(int)
-    # Preencher nulos (se houvesse) com 0
+    # Preencher nulos com 0
     df_final.fillna(0, inplace=True)
     
     print(f"Shape final unificado: {df_final.shape}")
     
-    # Salvar na Silver (Usando pickle para manter o objeto DataFrame fiel)
+    # Salvar na Silver
     df_final.to_pickle(SILVER_DATAFRAME_FILE)
     print(f"DataFrame salvo na Silver em {SILVER_DATAFRAME_FILE}")
 
@@ -94,11 +92,10 @@ def etl_load_to_gold():
     """Lê o dataframe da Silver e salva como tabela no SQLite (Gold)"""
     print("Iniciando carga Gold (SQLite)...")
     
-    # Ler Dataframe da Silver
+    # Le Dataframe da Silver
     df = pd.read_pickle(SILVER_DATAFRAME_FILE)
     
     # Conectar SQLite
-    # Usando 3 barras /// para caminho absoluto no Linux
     sqlite_engine = create_engine(f'sqlite:///{GOLD_DB_PATH}')
     
     # Salvar tabela (substitui se existir)
@@ -126,7 +123,7 @@ dag = DAG(
     catchup=False # Não tenta rodar execuções passadas
 )
 
-# Definindo as Tasks (Tarefas)
+# Definindo as Tasks
 t1_mysql_bronze = PythonOperator(
     task_id='extract_mysql_to_bronze',
     python_callable=etl_extract_mysql_to_bronze,
@@ -151,6 +148,6 @@ t4_load_gold = PythonOperator(
     dag=dag,
 )
 
-# --- DEFINIÇÃO DAS DEPENDÊNCIAS (O FLUXO) ---
+# ---(O FLUXO) ---
 # T1 e T2 podem rodar em paralelo. T3 só roda depois que AMBAS acabarem. T4 roda depois de T3.
 [t1_mysql_bronze, t2_mongo_bronze] >> t3_transform_silver >> t4_load_gold
