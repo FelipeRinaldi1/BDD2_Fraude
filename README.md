@@ -1,6 +1,101 @@
-# Execução do Pipeline de Dados
+# Plataforma de Engenharia de Dados para Detecção de Fraudes em Cartão de Crédito
 
-Siga a ordem exata dos comandos abaixo no terminal da sua VM.
+Este repositório apresenta a implementação de uma **plataforma completa de Engenharia de Dados**, com pipeline ETL automatizado, integração de múltiplas fontes de dados e aplicação de **Machine Learning** para detecção de fraudes em transações de cartão de crédito.
+
+---
+
+## Objetivos do Projeto
+
+* Construir um pipeline de dados automatizado para detecção de fraudes;
+* Ingerir dados de fontes heterogêneas (**MySQL** e **MongoDB**);
+* Simular um **Data Lakehouse** utilizando a **Arquitetura Medalhão**;
+* Automatizar o fluxo ETL com **Apache Airflow**;
+* Preparar dados para análise e Ciência de Dados;
+* Aplicar um modelo de **Machine Learning** para classificação de transações fraudulentas.
+
+---
+
+## Arquitetura da Solução
+
+A arquitetura do projeto simula um ambiente real de Engenharia de Dados:
+
+```
+Fontes de Dados
+   │
+   ├── MySQL (Docker)
+   ├── MongoDB Atlas
+   │
+   ▼
+Pipeline ETL (Python)
+   │
+   ▼
+Data Lakehouse (Arquitetura Medalhão)
+   ├── Bronze  → Dados brutos (.txt)
+   ├── Silver  → Dados tratados (DataFrames)
+   └── Gold    → Dados analíticos (SQLite)
+   │
+   ▼
+Machine Learning
+   └── Classificação de Fraudes
+```
+
+---
+
+## Tecnologias Utilizadas
+
+* **Python 3**
+* **Apache Airflow**
+* **Docker**
+* **MySQL**
+* **MongoDB Atlas**
+* **SQLite**
+* **Pandas / NumPy**
+
+---
+
+## Fontes de Dados
+
+O dataset original (`credit-card.csv`) foi particionado para simular fontes distintas:
+
+* **credit-card1.csv** → Ingerido no **MySQL**;
+* **credit-card2.json** → Ingerido no **MongoDB Atlas**.
+
+---
+
+## Pipeline ETL
+
+### Extração
+
+* Leitura dos dados a partir do MySQL (Docker);
+* Leitura dos dados do MongoDB Atlas;
+* Consolidação das fontes.
+
+### Transformação
+
+* Padronização de colunas;
+* Limpeza de dados inconsistentes;
+* Seleção de features relevantes;
+* Preparação para Machine Learning.
+
+### Carga
+
+* **Bronze:** dados brutos;
+* **Silver:** dados tratados;
+* **Gold:** dados consolidados para análise.
+
+---
+
+## Conclusão
+
+Este projeto demonstra, na prática, conceitos fundamentais de **Banco de Dados**, **Engenharia de Dados**, **ETL**, **Arquitetura de Dados**, **Automação com Airflow** e **Machine Learning**, simulando um cenário real de detecção de fraudes em cartão de crédito.
+
+---
+
+# Como Executar o Projeto
+
+* Baixe os arquivos do repositório ou clone;
+* E para a execução do Pipeline de Dados, siga a ordem exata dos comandos abaixo no terminal da sua VM:
+
 ```bash
 
 #1
