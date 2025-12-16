@@ -1,4 +1,3 @@
-# Nome do arquivo: 1_setup_split.py
 import pandas as pd
 import json
 import os
