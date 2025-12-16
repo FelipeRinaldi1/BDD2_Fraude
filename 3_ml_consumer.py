@@ -46,12 +46,10 @@ def run_ml_model():
         
         print(f"1. Volume Total Processado:   R$ {total_transacionado:,.2f}")
         print(f"2. Total Identificado Fraude: R$ {total_prejuizo:,.2f}")
-        print(f"3. Ticket Médio (Geral):      R$ {ticket_medio_geral:,.2f}")
-        print(f"4. Ticket Médio (Fraudes):    R$ {ticket_medio_fraude:,.2f}")
         print("-" * 50)
         print("Insight: Dados agregados prontos para Dashboards executivos.")
     else:
-        print("AVISO: Coluna 'Amount' não encontrada. Pulei o relatório financeiro.")
+        print("AVISO: Coluna 'Amount' não encontrada.")
     print("="*50 + "\n")
 
 
